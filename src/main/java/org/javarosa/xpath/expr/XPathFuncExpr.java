@@ -391,9 +391,15 @@ public class XPathFuncExpr extends XPathExpression {
         } else if (name.equals("string-length")) {
             assertArgsCount(name, args, 1);
             return stringLength(argVals[0]);
-        } else if (name.equals("normalize-space")) {
-            assertArgsCount(name, args, 1);
-            return normalizeSpace(argVals[0]);
+        } else if (name.equals("normalize-space") && args.length <= 1) {
+            Object arg;
+            if (args.length == 0) {
+                TreeReference ref = evalContext.getContextRef();
+                arg = evalContext.resolveReference(ref).getValue().getDisplayText();
+            } else {
+                arg = argVals[0];
+            }
+            return normalizeSpace(arg);
         } else if (name.equals("checklist") && args.length >= 2) { //non-standard
             if (args.length == 3 && argVals[2] instanceof XPathNodeset) {
                 return checklist(argVals[0], argVals[1], ((XPathNodeset) argVals[2]).toArgList());

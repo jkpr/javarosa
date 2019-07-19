@@ -151,6 +151,18 @@ public class Scenario {
     }
 
     /**
+     * Evaluates the constraint at the element with the given XPath with the given value.
+     *
+     * Returns false if the constraint is violated, true if not.
+     */
+    public Boolean evaluateConstraint(String xPath, String value) {
+        // The xPath must match a model element. This ensures we can resolve it.
+        TreeElement element = Objects.requireNonNull(resolve(xPath));
+        boolean result = formDef.evaluateConstraint(element.getRef(), new StringData(value));
+        return result;
+    }
+
+    /**
      * Jumps to next event
      * </ul>
      */
